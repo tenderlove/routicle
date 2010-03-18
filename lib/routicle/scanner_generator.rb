@@ -18,6 +18,10 @@ module Routicle
     def << tokens
       tokens.each do |token|
         next if ':id' == token
+
+        matcher = "/#{token}/"
+        next if @lexemes.any? { |k,v| v == matcher }
+
         @lexemes << [:"STRING#{@lexemes.length}", "/#{token}/"]
       end
     end

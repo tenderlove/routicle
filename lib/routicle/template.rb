@@ -9,10 +9,10 @@ module Routicle
     end
 
     def compile
-      scanner = ScannerGenerator.new
+      scangen  = ScannerGenerator.new
 
       @routes.each do |resource, destination|
-        scanner << resource.split('/').find_all { |part| !part.empty? }
+        scangen << resource.split('/').find_all { |part| !part.empty? }
       end
     end
   end

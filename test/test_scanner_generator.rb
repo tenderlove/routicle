@@ -21,4 +21,11 @@ class TestScannerGenerator < Test::Unit::TestCase
 
     assert_equal(3, generator.possible_tokens.length)
   end
+
+  def test_add_two_foo
+    generator = Routicle::ScannerGenerator.new
+    generator << %w{ foo foo }
+
+    assert_equal(3, generator.possible_tokens.length)
+  end
 end
