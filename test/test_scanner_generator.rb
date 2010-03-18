@@ -35,5 +35,22 @@ class TestScannerGenerator < Test::Unit::TestCase
 
     assert_equal(2, seq.length)
     assert_equal([:STRING2, :STRING2], seq)
+
+  end
+
+  def test_token_names_slash
+    generator = Routicle::ScannerGenerator.new
+    seq = generator.add %w{ / foo }
+
+    assert_equal(2, seq.length)
+    assert_equal([:SLASH, :STRING2], seq)
+  end
+
+  def test_token_names_id
+    generator = Routicle::ScannerGenerator.new
+    seq = generator.add %w{ / foo / :id }
+
+    assert_equal(4, seq.length)
+    assert_equal([:SLASH, :STRING2, :SLASH, :ID], seq)
   end
 end

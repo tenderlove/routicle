@@ -24,9 +24,14 @@ module Routicle
     def add tokens
       seq = []
       tokens.each do |token|
-        next if ':id' == token
+        if ':id' == token
+          seq << :ID
+          next
+        end
 
-        matcher = "/#{token}/"
+        # FIXME: this is a total hack
+        matcher = "/#{token.sub(/\//, '\/')}/"
+
         if tuple = @lexemes.find { |k,v| v == matcher }
           seq << tuple.first
         else
