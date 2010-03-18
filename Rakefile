@@ -4,8 +4,7 @@ require 'rubygems'
 require 'hoe'
 
 Hoe.spec 'routicle' do
-  # self.rubyforge_name = 'routiclex' # if different than 'routicle'
-  # developer('FIX', 'FIX@example.com')
+  developer('Aaron Patterson', 'aaron@tenderlovemaking.com')
   self.readme_file   = 'README.rdoc'
   self.history_file  = 'CHANGELOG.rdoc'
   self.extra_rdoc_files  = FileList['*.rdoc']
