@@ -28,4 +28,12 @@ class TestScannerGenerator < Test::Unit::TestCase
 
     assert_equal(3, generator.possible_tokens.length)
   end
+
+  def test_token_sequence
+    generator = Routicle::ScannerGenerator.new
+    seq = generator.add %w{ foo foo }
+
+    assert_equal(2, seq.length)
+    assert_equal([:STRING2, :STRING2], seq)
+  end
 end

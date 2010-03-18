@@ -15,16 +15,29 @@ module Routicle
       @lexemes.map { |tuple| tuple.first }
     end
 
-    def << tokens
+    ###
+    # Adds a sequence of +tokens+ to the scanner generator.  Returns the token
+    # names for each token.
+    #
+    #   scangen.add(%w{ / foo }) # => [:SLASH, :STRING2]
+
+    def add tokens
+      seq = []
       tokens.each do |token|
         next if ':id' == token
 
         matcher = "/#{token}/"
-        next if @lexemes.any? { |k,v| v == matcher }
-
-        @lexemes << [:"STRING#{@lexemes.length}", "/#{token}/"]
+        if tuple = @lexemes.find { |k,v| v == matcher }
+          seq << tuple.first
+        else
+          tuple = [:"STRING#{@lexemes.length}", "/#{token}/"]
+          seq << tuple.first
+          @lexemes << tuple
+        end
       end
+      seq
     end
+    alias :<< :add
 
     def compile
       template = <<-eos
