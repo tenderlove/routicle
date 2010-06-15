@@ -40,7 +40,15 @@ end
 
   def next_token; @scanner.next_token; end
       eoruby
-      template.result binding
+      grammar = template.result binding
+
+      if $DEBUG
+        puts "############# GENERATED GRAMMAR"
+        puts grammar
+        puts "############# END GENERATED GRAMMAR"
+      end
+
+      grammar
     end
 
     ###
@@ -51,6 +59,13 @@ end
       nfa        = Racc::States.new(result.grammar).nfa
       parsegen   = Racc::ParserFileGenerator.new nfa.dfa, result.params
       parser_src = parsegen.generate_parser
+
+      if $DEBUG
+        puts "############# PARSED GRAMMAR"
+        puts parser_src
+        puts "############# END PARSED GRAMMAR"
+      end
+
       Module.new { class_eval parser_src }.const_get('GeneratedGrammar')
     end
   end
