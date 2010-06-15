@@ -17,4 +17,13 @@ class TestRouticle < Test::Unit::TestCase
 
     assert_equal({:a => :b}, router.match('/foo/1/bar'))
   end
+
+  def test_route_to_list
+    dest = [{ :a => :b }, 'cookie', 'monster']
+    template = Routicle::Template.new
+    template.map('/foo/:id/bar', dest)
+    router = template.compile
+
+    assert_equal(dest, router.match('/foo/1/bar'))
+  end
 end
