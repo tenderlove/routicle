@@ -2,6 +2,8 @@ module Routicle
   class Template
     def initialize
       @routes = {}
+      @scangen = ScannerGenerator.new
+      @gramgen = GrammarGenerator.new
     end
 
     def map route, desination
@@ -9,11 +11,11 @@ module Routicle
     end
 
     def compile
-      scangen  = ScannerGenerator.new
-
       @routes.each do |resource, destination|
-        scangen << resource.split('/').find_all { |part| !part.empty? }
+        tokens = @scangen.add resource
+        @gramgen.add tokens, destination
       end
+      @gramgen.to_parser.new @scangen.compile
     end
   end
 end

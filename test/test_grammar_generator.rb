@@ -16,7 +16,11 @@ class TestGrammarGenerator < Test::Unit::TestCase
   def test_to_parser
     gramgen = Routicle::GrammarGenerator.new
     gramgen.add [:SLASH, :ID], { :foo => :bar }
-    parser = gramgen.to_parser.new Routicle::ScannerGenerator.new.compile
+
+    scangen = Routicle::ScannerGenerator.new
+    scangen << '/:id'
+
+    parser = gramgen.to_parser.new scangen.compile
     assert_equal({:foo => :bar}, parser.parse('/10'))
   end
 end

@@ -36,6 +36,7 @@ end
     @scanner.scan_setup str
     do_parse
   end
+  alias :match :parse
 
   def next_token; @scanner.next_token; end
       eoruby

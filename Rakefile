@@ -10,4 +10,10 @@ Hoe.spec 'routicle' do
   self.extra_rdoc_files  = FileList['*.rdoc']
 end
 
+rule '.rb' => '.rex' do |t|
+  sh "rex --independent -o #{t.name} #{t.source}"
+end
+
+Rake::Task[:test].prerequisites << "lib/routicle/template/scanner.rb"
+
 # vim: syntax=ruby

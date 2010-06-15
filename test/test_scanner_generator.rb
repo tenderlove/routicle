@@ -2,55 +2,49 @@ require 'test/unit'
 require 'routicle'
 
 class TestScannerGenerator < Test::Unit::TestCase
-  def test_default_tokens
-    generator = Routicle::ScannerGenerator.new
-
-    assert_equal([:ID, :SLASH], generator.possible_tokens)
-  end
-
   def test_add_id
     generator = Routicle::ScannerGenerator.new
-    generator << [':id']
+    generator << ':id'
 
-    assert_equal([:ID, :SLASH], generator.possible_tokens)
+    assert_equal([:ID], generator.possible_tokens)
   end
 
   def test_add_foo
     generator = Routicle::ScannerGenerator.new
-    generator << ['foo']
+    generator << 'foo'
 
-    assert_equal(3, generator.possible_tokens.length)
+    assert_equal(1, generator.possible_tokens.length)
   end
 
   def test_add_two_foo
     generator = Routicle::ScannerGenerator.new
-    generator << %w{ foo foo }
+    generator << 'foo/foo'
 
-    assert_equal(3, generator.possible_tokens.length)
+    assert_equal(2, generator.possible_tokens.length)
   end
 
   def test_token_sequence
     generator = Routicle::ScannerGenerator.new
-    seq = generator.add %w{ foo foo }
+    seq = generator.add 'foo/foo'
 
-    assert_equal(2, seq.length)
-    assert_equal([:STRING2, :STRING2], seq)
+    assert_equal(3, seq.length)
+    assert_equal([:STRING1, :SLASH, :STRING1], seq)
 
   end
 
   def test_token_names_slash
     generator = Routicle::ScannerGenerator.new
-    seq = generator.add %w{ / foo }
+    seq = generator.add '/foo'
 
     assert_equal(2, seq.length)
-    assert_equal([:SLASH, :STRING2], seq)
+    assert_equal([:SLASH, :STRING1], seq)
   end
 
   def test_token_names_id
     generator = Routicle::ScannerGenerator.new
-    seq = generator.add %w{ / foo / :id }
+    seq = generator.add '/foo/:id'
 
     assert_equal(4, seq.length)
-    assert_equal([:SLASH, :STRING2, :SLASH, :ID], seq)
+    assert_equal([:SLASH, :STRING1, :SLASH, :ID], seq)
   end
 end
