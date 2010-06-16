@@ -3,7 +3,8 @@ class Template::Scanner
 
 macro
   string    \w+
-  id        :{string}
+  id        :id
+  format    :format
 
 rule
 
@@ -12,6 +13,8 @@ rule
             {string}  { [@string_syms[text], "/#{text.sub(/\//, '\/')}/"] }
             \/        { [:SLASH, '/\//'] }
             {id}      { [:ID, '/\d+/'] }
+            {format}  { [:FORMAT, '/\w+/'] }
+            \.        { [:DOT, '/\./'] }
 
 inner
 

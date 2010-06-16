@@ -42,4 +42,11 @@ class TestRouticle < Test::Unit::TestCase
     assert_equal({:foo => :id},  router.match('/foo/1'))
     assert_equal('/:id', router.match('/1'))
   end
+
+  def test_formatted_route
+    @template.map '/foo/:id.:format', { :foo => :bar }
+
+    router = @template.compile
+    assert_equal({:foo => :bar}, router.match('/foo/1.xml'))
+  end
 end

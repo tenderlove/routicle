@@ -7,22 +7,19 @@ module Routicle
 
     def initialize
       @template_scanner = Routicle::Template::Scanner.new
-      @lexemes = {}
-    end
-
-    def possible_tokens
-      @lexemes.keys.map { |tuple| tuple.first }
+      @lexemes = []
     end
 
     ###
-    # Adds a sequence of +tokens+ to the scanner generator.  Returns the token
+    # Adds a +route+ to the scanner generator.  Returns the token
     # names for each token.
     #
-    #   scangen.add(%w{ / foo }) # => [:SLASH, :STRING2]
+    #   scangen.add('/foo') # => [:SLASH, :STRING2]
 
     def add route
       tuples = @template_scanner.parse route
-      tuples.each { |tuple| @lexemes[tuple] = true }
+      @lexemes += tuples
+      @lexemes.uniq!
       tuples.map { |x| x.first }
     end
     alias :<< :add
@@ -33,7 +30,7 @@ module Routicle
         def next_token
           return if @ss.eos?
           case
-          <% @lexemes.keys.each do |sym, regex| %>
+          <% @lexemes.each do |sym, regex| %>
           when text = @ss.scan(<%= regex %>)
             [:<%= sym %>, text]
           <% end %>
@@ -42,8 +39,16 @@ module Routicle
           end
         end
       eos
+      scanner_src = ERB.new(template).result(binding)
+
+      if $DEBUG
+        puts "######### SCANNER SOURCE"
+        puts scanner_src
+        puts "######### END SCANNER SOURCE"
+      end
+
       klass = Class.new(Scanner)
-      klass.class_eval ERB.new(template).result(binding), __FILE__, line
+      klass.class_eval scanner_src, __FILE__, line
       klass.new
     end
   end

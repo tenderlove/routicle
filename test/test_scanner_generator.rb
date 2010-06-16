@@ -6,21 +6,21 @@ class TestScannerGenerator < Test::Unit::TestCase
     generator = Routicle::ScannerGenerator.new
     generator << ':id'
 
-    assert_equal([:ID], generator.possible_tokens)
+    assert_equal :ID, generator.lexemes.first.first
   end
 
   def test_add_foo
     generator = Routicle::ScannerGenerator.new
     generator << 'foo'
 
-    assert_equal(1, generator.possible_tokens.length)
+    assert_equal 1, generator.lexemes.length
   end
 
   def test_add_two_foo
     generator = Routicle::ScannerGenerator.new
     generator << 'foo/foo'
 
-    assert_equal(2, generator.possible_tokens.length)
+    assert_equal 2, generator.lexemes.length
   end
 
   def test_token_sequence

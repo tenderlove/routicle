@@ -2,28 +2,41 @@ require 'test/unit'
 require 'routicle'
 
 class TestScanner < Test::Unit::TestCase
+  def setup
+    @gen = Routicle::ScannerGenerator.new
+  end
+
+  def test_tokenize_format
+    @gen << '/foo.:format'
+    scanner = @gen.compile
+    tokens = tokenize(scanner, '/foo.xml')
+    assert_equal [
+      :SLASH,
+      :STRING1,
+      :DOT,
+      :FORMAT
+    ], tokens.map { |x| x.first }
+  end
+
   def test_tokenize
-    gen = Routicle::ScannerGenerator.new
-    gen << '/'
-    scanner = gen.compile
+    @gen << '/'
+    scanner = @gen.compile
 
     tokens = tokenize(scanner, '/')
     assert_equal([[:SLASH, '/']], tokens)
   end
 
   def test_tokenize_slash_id
-    gen = Routicle::ScannerGenerator.new
-    gen << '/:id'
-    scanner = gen.compile
+    @gen << '/:id'
+    scanner = @gen.compile
 
     tokens = tokenize(scanner, '/10')
     assert_equal([[:SLASH, '/'], [:ID, '10']], tokens)
   end
 
   def test_tokenize_user_input
-    gen = Routicle::ScannerGenerator.new
-    gen << '/foo/bar/:id'
-    scanner = gen.compile
+    @gen << '/foo/bar/:id'
+    scanner = @gen.compile
 
     tokens = tokenize(scanner, '/foo/bar/10')
     assert_equal([
