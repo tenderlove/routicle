@@ -32,12 +32,14 @@ class TestRouticle < Test::Unit::TestCase
     @template.map '/foo/:id/bar', { :foo => :bar }
     @template.map '/foo/:id/baz', { :foo => :baz }
     @template.map '/foo/:id/foo', { :foo => :foo }
+    @template.map '/foo/:id',     { :foo => :id }
     @template.map '/:id',         '/:id'
 
     router = @template.compile
     assert_equal({:foo => :bar}, router.match('/foo/1/bar'))
     assert_equal({:foo => :baz}, router.match('/foo/1/baz'))
     assert_equal({:foo => :foo}, router.match('/foo/1/foo'))
+    assert_equal({:foo => :id},  router.match('/foo/1'))
     assert_equal('/:id', router.match('/1'))
   end
 end
